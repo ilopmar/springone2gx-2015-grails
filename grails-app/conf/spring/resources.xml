@@ -19,10 +19,16 @@
              service-interface="springone2gx.flight.BookingGateway"
              default-request-channel="bookingRequestChannel"/>
 
-    <chain input-channel="bookingRequestChannel">
+    <chain input-channel="bookingRequestChannel" output-channel="emailConfirmationChannel">
         <service-activator ref="billForBookingService" method="pay"/>
         <service-activator ref="seatAvailabilityService" method="confirmSeat"/>
-        <service-activator ref="emailService" method="sendEmailSeatConfirmation"/>
     </chain>
+
+    <channel id="emailConfirmationChannel">
+        <queue capacity="2"/>
+    </channel>
+    <service-activator input-channel="emailConfirmationChannel"
+                       ref="emailService"
+                       method="sendEmailSeatConfirmation"/>
 
 </beans:beans>
