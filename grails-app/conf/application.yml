@@ -112,3 +112,11 @@ environments:
         jdbcInterceptors: ConnectionState
         defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
 
+springone2gx:
+  xmpp:
+    user: your-user
+    password: your-password
+    host: xmpp-server #talk.google.com
+    service: service #springone2gx
+    port: 5222
+    friend: your-friend

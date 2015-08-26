@@ -3,12 +3,15 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:task="http://www.springframework.org/schema/task"
+             xmlns:xmpp="http://www.springframework.org/schema/integration/xmpp"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
              http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
              http://www.springframework.org/schema/integration
              http://www.springframework.org/schema/integration/spring-integration.xsd
              http://www.springframework.org/schema/task
-             http://www.springframework.org/schema/task/spring-task.xsd">
+             http://www.springframework.org/schema/task/spring-task.xsd
+             http://www.springframework.org/schema/integration/xmpp
+             http://www.springframework.org/schema/integration/xmpp/spring-integration-xmpp.xsd">
 
     <!-- Flight Demo -->
     <task:executor id="executor" pool-size="1"/>
@@ -37,5 +40,20 @@
     <publish-subscribe-channel id="completedBookingChannel"/>
     <service-activator input-channel="completedBookingChannel"
                        ref="statsService" method="gatherStats"/>
+
+    <!-- XMPP Demo -->
+    <xmpp:xmpp-connection
+            id="xmppConnection"
+            user="${springone2gx.xmpp.user}"
+            password="${springone2gx.xmpp.password}"
+            host="${springone2gx.xmpp.host}"
+            port="${springone2gx.xmpp.port}"
+            service-name="${springone2gx.xmpp.service}"/>
+
+    <!-- Xmpp: Sent messages to user -->
+    <channel id="sendXmppMessagesChannel"/>
+    <xmpp:outbound-channel-adapter channel="sendXmppMessagesChannel"/>
+
+
 
 </beans:beans>
