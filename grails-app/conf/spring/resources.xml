@@ -54,6 +54,22 @@
     <channel id="sendXmppMessagesChannel"/>
     <xmpp:outbound-channel-adapter channel="sendXmppMessagesChannel"/>
 
+    <!-- Xmpp: Receive messages from user -->
+    <channel id="receiveXmppMessages"/>
+    <xmpp:inbound-channel-adapter channel="receiveXmppMessages"/>
+
+    <!-- Xmpp: Command messages -->
+    <chain input-channel="receiveXmppMessages">
+        <filter expression="payload.startsWith('command ')" discard-channel="chatMessageReceived"/>
+        <transformer ref="xmppService" method="parseCommand"/>
+        <service-activator ref="xmppService" method="executeCommand"/>
+        <service-activator ref="xmppService" method="sendMessage"/>
+    </chain>
+
+    <!-- Xmpp: Normal messages -->
+    <channel id="chatMessageReceived"/>
+    <service-activator input-channel="chatMessageReceived" ref="xmppService" method="chatMessageReceived"/>
+
 
 
 </beans:beans>
